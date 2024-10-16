@@ -10,17 +10,21 @@ describe('Verification of free todo MVC Project', () => {
     })
 
     it('Create todos', () => {
+        // Check header
         cy.get('header h1').should('contain.text', 'todos');
 
         cy.wrap(todos).each((todo: string, i) => {
+            // enter todo
             cy.get('.new-todo').type(todo + '{enter}');
 
+            // confirm todos are active and counts match
             cy.get('[data-testid="todo-item"]')
                 .should('have.length', i+1)
                 .last()
                 .should('not.have.class', 'completed')
                 .should('have.text', todo);
 
+            // confirm updated todo count
             cy.get('[data-testid="todo-count"]')
                 .invoke('text')
                 .invoke('trim')
