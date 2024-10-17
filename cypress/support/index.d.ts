@@ -14,7 +14,7 @@ declare namespace Cypress {
         ): Cypress.Chainable<Cypress.JQueryWithSelector<HTMLElement>>;
         /**
          * Finds element(s) by the "dataTag" as defined as an environment variable in
-         * cypress.config.tsKsKS
+         * cypress.config.
          * @param value The value of the data tag
          * @param options All options available with cy.get and a new search option
          * for partial matches of on the "value" argument
