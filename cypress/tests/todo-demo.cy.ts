@@ -18,14 +18,14 @@ describe('Verification of free todo MVC Project', () => {
             cy.get('.new-todo').type(todo + '{enter}');
 
             // confirm todos are active and counts match
-            cy.get('[data-testid="todo-item"]')
+            cy.getByDataTag('todo-item')
                 .should('have.length', i+1)
                 .last()
                 .should('not.have.class', 'completed')
                 .should('have.text', todo);
 
             // confirm updated todo count
-            cy.get('[data-testid="todo-count"]')
+            cy.getByDataTag('todo-count')
                 .invoke('text')
                 .invoke('trim')
                 .invoke('replace', /\s+/, ' ')

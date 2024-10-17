@@ -6,6 +6,9 @@ export default defineConfig({
     specPattern: '**/*.cy.ts',
     viewportWidth: 1920,
     viewportHeight: 1080,
+    env: {
+      dataTag: 'data-testid'
+    },
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },

@@ -25,13 +25,37 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 //
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+
+Cypress.Commands.add(
+    'getByAttribute',
+    { prevSubject: ['optional', 'element'] },
+    (
+        subject: void | Cypress.JQueryWithSelector<HTMLElement>,
+        attribute: string,
+        value: string,
+        options?: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow & { search: 'contains' | 'startsWith' | 'endsWith' }>
+    ): Cypress.Chainable<Cypress.JQueryWithSelector<HTMLElement>> => {
+        const search = options?.search
+            ? { contains: '*', startsWith: '^', endsWith: '$' }[options.search]
+            : ''
+        if (subject) {
+            options.withinSubject = subject;
+        }
+        return cy.get(`[${attribute}${search}="${value}"]`, options);
+    }
+)
+
+Cypress.Commands.add(
+    'getByDataTag',
+    { prevSubject: ['optional', 'element'] },
+    (
+        subject: void | Cypress.JQueryWithSelector<HTMLElement>,
+        value: string,
+        options?: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow & { search: 'contains' | 'startsWith' | 'endsWith' }>
+    ): Cypress.Chainable<Cypress.JQueryWithSelector<HTMLElement>> => {
+        if (subject) {
+            options.withinSubject = subject;
+        }
+        return cy.getByAttribute(Cypress.env('dataTag'), value, options);
+    }
+)
