@@ -80,7 +80,7 @@ describe('Verification of todo MVC Project', () => {
                 // always delete top todo item
                 cy.getByDataTag('todo-item')
                     .should('have.length', todos.length - i)
-                    .eq(0)
+                    .first()
                     .as('currentTodo')
                     .getByDataTag('todo-title')
                     .should('contain.text', todos[i]);
