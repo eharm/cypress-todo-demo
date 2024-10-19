@@ -73,5 +73,29 @@ describe('Verification of todo MVC Project', () => {
                 .should('contain.text', `${todos.length} items left`);
             cy.get('.clear-completed').should('not.exist');
         })
+
+        it('Verify "Clear completed" button', () => {
+            cy.getByDataTag('todo-item').each((_, i) => {
+                // confirm todo count and content of to-be deleted todo
+                // always delete top todo item
+                cy.getByDataTag('todo-item')
+                    .should('have.length', todos.length - i)
+                    .eq(0)
+                    .as('currentTodo')
+                    .getByDataTag('todo-title')
+                    .should('contain.text', todos[i]);
+
+                // toggle todo and clear completed
+                Todo.toggleTodo('check', todos[i]);
+                cy.get('@currentTodo').should('have.class', 'completed');
+                cy.get('.clear-completed').click();
+
+                // confirm removal of todo and remaining count
+                cy.contains(todos[i]).should('not.exist');
+                cy.getByDataTag('todo-item').should('have.length', todos.length - i - 1)
+            })
+
+            cy.getByDataTag('todo-item').should('not.exist');
+        })
     })
 })
