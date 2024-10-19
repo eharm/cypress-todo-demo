@@ -31,9 +31,9 @@ export class Todo {
                         : 'be.checked'
                 ).then(($cbox) => {
                     if (state === 'check') {
-                        cy.wrap($cbox).check();
+                        cy.wrap($cbox, { log: false }).check();
                     } else {
-                        cy.wrap($cbox).uncheck();
+                        cy.wrap($cbox, { log: false }).uncheck();
                     }
                 });
 
