@@ -39,6 +39,7 @@ Cypress.Commands.add(
             ? { contains: '*', startsWith: '^', endsWith: '$' }[options.search]
             : ''
         if (subject) {
+            options ??= {} as Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow & { search: 'contains' | 'startsWith' | 'endsWith' }>
             options.withinSubject = subject;
         }
         return cy.get(`[${attribute}${search}="${value}"]`, options);
@@ -54,6 +55,7 @@ Cypress.Commands.add(
         options?: Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow & { search: 'contains' | 'startsWith' | 'endsWith' }>
     ): Cypress.Chainable<Cypress.JQueryWithSelector<HTMLElement>> => {
         if (subject) {
+            options ??= {} as Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow & { search: 'contains' | 'startsWith' | 'endsWith' }>
             options.withinSubject = subject;
         }
         return cy.getByAttribute(Cypress.env('dataTag'), value, options);
