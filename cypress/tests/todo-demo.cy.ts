@@ -97,5 +97,44 @@ describe('Verification of todo MVC Project', () => {
 
             cy.getByDataTag('todo-item').should('not.exist');
         })
+
+        it.only('Verify tabbed filtering', () => {
+            Todo.toggleTodo('check', todos[0])
+
+            // Default tab state
+            cy.get('.filters')
+                .contains('a', 'All')
+                .should('have.class', 'selected');
+            cy.get('.filters')
+                .contains('a', 'Active')
+                .as('activeTab')
+                .should('not.have.class', 'selected');
+            cy.get('.filters')
+                .contains('a', 'Completed')
+                .as('completedTab')
+                .should('not.have.class', 'selected');
+
+            // Check active tab
+            cy.get('@activeTab').click();
+            cy.get('@activeTab').should('have.class', 'selected');
+            cy.getByDataTag('todo-title')
+                .should('have.length', 2)
+                .invoke('text')
+                .should('not.contain', todos[0])
+                .should('contain', todos[1])
+                .should('contain', todos[2])
+
+            // Check completed tab
+            cy.get('@completedTab').click();
+            cy.get('@completedTab').should('have.class', 'selected');
+            cy.getByDataTag('todo-title')
+                .should('have.length', 1)
+                .invoke('text')
+                .should('contain', todos[0])
+                .should('not.contain', todos[1])
+                .should('not.contain', todos[2])
+            cy.get('.clear-completed').click();
+            cy.getByDataTag('todo-item').should('not.exist');
+        })
     })
 })
