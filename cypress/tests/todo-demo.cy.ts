@@ -98,7 +98,7 @@ describe('Verification of todo MVC Project', () => {
             cy.getByDataTag('todo-item').should('not.exist');
         })
 
-        it.only('Verify tabbed filtering', () => {
+        it('Verify tabbed filtering', () => {
             Todo.toggleTodo('check', todos[0])
 
             // Default tab state
@@ -135,6 +135,30 @@ describe('Verification of todo MVC Project', () => {
                 .should('not.contain', todos[2])
             cy.get('.clear-completed').click();
             cy.getByDataTag('todo-item').should('not.exist');
+        })
+
+        it('Verify editing of todos', () => {
+            const editText = ' edited'
+            // Complete first todo in list (top in DOM)
+            Todo.toggleTodo('check', todos[0]);
+
+            cy.getByDataTag('todo-item')
+                .should('have.length', todos.length)
+                .each(($todo, i) => {
+                    cy.wrap($todo)
+                        .should('not.have.class', 'editing')
+                        .getByDataTag('todo-title')
+                        .should('contain.text', todos[i])
+                        .dblclick();
+                    cy.wrap($todo)
+                        .should('have.class', 'editing')
+                        .find('input.edit')
+                        .type(`{moveToEnd}${editText}{enter}`);
+                    cy.wrap($todo)
+                        .should('not.have.class', 'editing')
+                        .getByDataTag('todo-title')
+                        .should('contain.text', todos[i] + editText);
+                });
         })
     })
 })
