@@ -176,6 +176,7 @@ describe('Verification of todo MVC Project', () => {
                             i === 0 ? 'have.class' : 'not.have.class',
                             'completed'
                         ).within(() => {
+                            // Verify visibility of pseudo element then click
                             cy.get('button.destroy')
                                 .should('not.be.visible')
                                 .invoke('show')
