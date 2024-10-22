@@ -1,3 +1,4 @@
+import { each } from "cypress/types/bluebird";
 import { Todo } from "../pages/todo.po";
 
 describe('Verification of todo MVC Project', () => {
@@ -159,6 +160,34 @@ describe('Verification of todo MVC Project', () => {
                         .getByDataTag('todo-title')
                         .should('contain.text', todos[i] + editText);
                 });
+        })
+
+        it('Delete Todos', () => {
+            Todo.toggleTodo('check', todos[0]);
+
+            cy.getByDataTag('todo-item')
+                .should('have.length', todos.length)
+                .each(($todo, i) => {
+                    // confirm todo list length before delete
+                    cy.getByDataTag('todo-item').should('have.length', todos.length - i)
+                    // scope to current todo and delete
+                    cy.wrap($todo)
+                        .should(
+                            i === 0 ? 'have.class' : 'not.have.class',
+                            'completed'
+                        ).within(() => {
+                            cy.get('button.destroy')
+                                .should('not.be.visible')
+                                .invoke('show')
+                                .should('be.visible')
+                                .click();
+                        })
+                    // confirm todo list length after delete
+                    cy.getByDataTag('todo-title')
+                        .should('have.length', todos.length - (i + 1))
+                        .invoke('text')
+                        .should('not.contain', todos[i])
+                })
         })
     })
 })

@@ -6,7 +6,8 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
-    "types": ["node", "cypress"]
+    "types": ["node", "cypress"],
+    "baseUrl": "./"
   },
   "include": ["**/*.ts"],
   "lib": ["ES5", "dom"]
